@@ -9,23 +9,22 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
+from urllib.parse import quote_plus
 
+from dotenv import load_dotenv
+from pymongo import MongoClient
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.getenv("SECRET_KEY")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+DEBUG = os.getenv("DEBUG") == "True"
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-inqepy9a=51f#8%g2^3me4#fpc!17(&0j$e(vvw%d&sdtj$mbx'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['inventory-app-p3s4.onrender.com','localhost']
 
 
 # Application definition
@@ -37,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'inventory'
 ]
 
 MIDDLEWARE = [
@@ -70,15 +70,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'inventory_management.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_CLUSTER = os.getenv('DB_CLUSTER')
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+
+encoded_user = quote_plus(DB_USER)
+encoded_password = quote_plus(DB_PASSWORD)
+
+MONGO_URI = f"mongodb+srv://{encoded_user}:{encoded_password}@{DB_CLUSTER}/{DB_NAME}?retryWrites=true&w=majority"
+
+client = MongoClient(MONGO_URI)
+
+db = client[DB_NAME]
 
 
 # Password validation
