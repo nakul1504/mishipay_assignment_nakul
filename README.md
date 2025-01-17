@@ -187,7 +187,7 @@ Project documentation, including setup instructions, features, and API details.
 
 This application is deployed on [Render](https://render.com) and can be accessed at:
 
-[Live Application](https://inventory-app-p3s4.onrender.com/)
+[Live Application](https://inventory-management-app-ajyz.onrender.com/)
 
 For further details about the deployment or hosting environment, refer to the [Render Documentation](https://render.com/docs).
 
